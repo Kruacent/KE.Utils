@@ -31,7 +31,7 @@ namespace KE.Utils.API.Features.SCPs
         private HashSet<Player> Primary = new();
         private HashSet<Player> Secondary = new();
 
-        private IEnumerable<Player> AllSCP => Primary.Union(Secondary);
+        public IEnumerable<Player> AllSCP => Primary.Union(Secondary);
 
 
 

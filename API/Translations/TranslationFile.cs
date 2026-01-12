@@ -1,54 +1,32 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using System.Xml.Linq;
-using UserSettings.UserInterfaceSettings;
 
 namespace KE.Utils.API.Translations
 {
-    public struct TranslationFile
+    public abstract class TranslationFile
     {
+        public abstract string Lang { get; }
 
-        private string Language;
+        //translation key per file
+        public abstract string Key { get; }
 
-        private Dictionary<string, string> values;
+        public abstract List<TranslationKey> Values { get; }
 
 
-        public TranslationFile(string language,string rawjson)
+
+        public override string ToString()
         {
-            Language = language;
+            string result = $"({Lang}) {Key}\n";
 
-            values = JsonConvert.DeserializeObject<Dictionary<string, string>>(rawjson);
-            
-        }
-
-        public TranslationFile()
-        {
-            Language = string.Empty;
-            values = null;
-        }
-
-        public string Get(string key)
-        {
-            if(values is null)
+            foreach(TranslationKey key in Values)
             {
-                return "null";
+                result += key + "\n";
             }
-
-            if (!values.ContainsKey(key))
-            {
-                return "key not found : " + key;
-            }
-
-            return values[key];
+            return result;
         }
-
-
-
-
 
     }
 }
