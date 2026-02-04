@@ -11,6 +11,7 @@ namespace KE.Utils.API.CustomStats
     {
         public abstract Color ColorBar { get; }
         public abstract Color ColorText { get; }
+        public abstract StatusBar.AutoHideType AutoHide { get; }
 
 
 

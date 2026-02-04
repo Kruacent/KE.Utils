@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
@@ -28,9 +29,6 @@ namespace KE.Utils.API.Displays.DisplayMeow
             var dis = PlayerDisplay.Get(player);
             string id = hintPlacement.GetId(player);
             AbstractHint hint;
-
-
-            
             if (!dis.TryGetHint(id, out var aHint))
             {
 
@@ -52,11 +50,14 @@ namespace KE.Utils.API.Displays.DisplayMeow
                 hint.Hide = false;
                 hint.Text = text;
             }
+            
 
             
             hint.HideAfter(delay);
             return hint;
         }
+
+
 
         public void HideHint(HintPlacement hintPlacement, Player player,bool hide = true)
         {
@@ -78,7 +79,7 @@ namespace KE.Utils.API.Displays.DisplayMeow
         }
 
 
-        public MHint CreateAuto(Player player, TextUpdateHandler update, HintPlacement hintPlacement)
+        public MHint CreateAuto(Player player, TextUpdateHandler update, HintPlacement hintPlacement, HintSyncSpeed syncSpeed = HintSyncSpeed.Fastest)
         {
             string id = hintPlacement.GetId(player);
             Log.Info("auto at " + id);
@@ -88,7 +89,7 @@ namespace KE.Utils.API.Displays.DisplayMeow
                 YCoordinate = hintPlacement.YCoordinate,
                 Alignment = hintPlacement.HintAlignment,
                 AutoText = update,
-                SyncSpeed = HintServiceMeow.Core.Enum.HintSyncSpeed.Fastest,
+                SyncSpeed = syncSpeed,
                 Id = id
             };
 

@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UnityEngine;
 
-namespace KE.Utils.API.CustomStats
+namespace KE.Utils.API.CustomStats.GUI
 {
     public abstract class CustomStatBar : CustomStatBase, IStatBar
     {
@@ -20,6 +20,9 @@ namespace KE.Utils.API.CustomStats
         public abstract char Segment { get; }
         public AbstractHint BarHint { get; private set;}
         public AbstractHint ValueHint { get; private set;}
+
+        public virtual StatusBar.AutoHideType AutoHide => StatusBar.AutoHideType.AlwaysVisible;
+
         public override void Init(ReferenceHub ply)
         {
             base.Init(ply);
@@ -35,7 +38,7 @@ namespace KE.Utils.API.CustomStats
 
         public virtual string GetRawValue()
         {
-            string result = string.Empty;
+            string result = " ";
 
             if (!Check())
             {
@@ -68,7 +71,7 @@ namespace KE.Utils.API.CustomStats
         }
         public virtual string GetRaw()
         {
-            string result = string.Empty;
+            string result = " ";
 
             if (!Check())
             {

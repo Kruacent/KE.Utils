@@ -1,4 +1,6 @@
 ﻿using Exiled.API.Features;
+using Exiled.API.Features.Pools;
+using KE.Utils.API.CustomStats.GUI;
 using PlayerRoles;
 using PlayerStatsSystem;
 using System;
@@ -12,17 +14,17 @@ namespace KE.Utils.API.CustomStats
 
         private static List<Type> _types { get; } = new();
         public static IReadOnlyCollection<Type> Types => _types;
-        private readonly Dictionary<Type, CustomStatBase> _dictionarizedTypes = new();
         private static bool _awaken = false;
-        private static bool _events = false;
+        private bool _events = false;
         private ReferenceHub _hub;
-        private CustomStatBase[] _statModules;
+        private CustomStatBase[] _statModules = null;
+        private readonly Dictionary<Type, CustomStatBase> _dictionarizedTypes = new();
         public CustomStatBase[] StatModules
         {
             get
             {
 
-                if (_statModules is null || _statModules.Length != Types.Count)
+                if (_statModules is null)
                 {
                     AssignStatModules();
                 }
@@ -30,12 +32,43 @@ namespace KE.Utils.API.CustomStats
             }
         }
 
+
+        private CustomStatBar[] _statBars = null;
+        public CustomStatBar[] StatBars
+        {
+            get
+            {
+                if(_statBars is null)
+                {
+                    CustomStatBase[] stats = StatModules;
+
+                    List<CustomStatBar> list = ListPool<CustomStatBar>.Pool.Get();
+
+                    for (int i = 0; i < stats.Length; i++)
+                    {
+                        if (stats[i] is CustomStatBar bar)
+                        {
+                            list.Add(bar);
+                        }
+                    }
+
+                    _statBars = ListPool<CustomStatBar>.Pool.ToArrayReturn(list);
+
+                }
+
+
+                return _statBars;
+            }
+        }
+
+
+
         /// <summary>
         /// add your modules BEFORE giving the stats to player
         /// </summary>
         /// <typeparam name="T"></typeparam>
         /// <returns></returns>
-        public static bool AddModule<T>()
+        public static bool AddModule<T>() where T : CustomStatBase
         {
             if (_awaken)
             {
@@ -65,13 +98,16 @@ namespace KE.Utils.API.CustomStats
 
         private void Awake()
         {
+
             _awaken = true;
             _hub = ReferenceHub.GetHub(base.gameObject);
-            Log.Info("adding cps to " + _hub.Network_playerId.Value);
+            _hub.gameObject.AddComponent<CustomStatBarManager>();
+            
+            Log.Debug("adding cps to " + _hub.Network_playerId.Value);
             CustomStatBase[] statModules = StatModules;
             foreach (CustomStatBase statBase in statModules)
             {
-                Log.Info("adding " + statBase.GetType().Name);
+                Log.Debug("adding " + statBase.GetType().Name);
                 _dictionarizedTypes.Add(statBase.GetType(), statBase);
             }
             

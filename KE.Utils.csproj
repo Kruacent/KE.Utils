@@ -6,7 +6,7 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ExMod.Exiled" Version="9.10.2" />
+		<PackageReference Include="ExMod.Exiled" Version="9.12.6" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
@@ -20,7 +20,9 @@
 		<Reference Include="ProjectMER" HintPath="$(EXILED_REFERENCES)\ProjectMER.dll" />
 		<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
 		<Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
+		<Reference Include="KE.CustomRoles" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KE.CustomRoles.dll" />
 		<Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
+		<Reference Include="Pooling" HintPath="$(EXILED_REFERENCES)\Pooling.dll" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

@@ -38,13 +38,16 @@ namespace KE.Utils.Extensions
         {
             bool result = true;
             if (zone == ZoneType.LightContainment)
+            {
                 result = Map.DecontaminationState < DecontaminationState.Countdown;
+            }
+                
             switch (zone)
             {
                 case ZoneType.LightContainment:
                 case ZoneType.HeavyContainment:
                 case ZoneType.Entrance:
-                    result = !Warhead.IsDetonated;
+                    result &= !Warhead.IsDetonated;
                     break;
             }
             return result;

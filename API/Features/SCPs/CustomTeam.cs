@@ -1,7 +1,9 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
 using Exiled.Events.EventArgs.Player;
+using KE.CustomRoles.API.Features;
 using KE.Utils.API.Interfaces;
+using PlayerRoles.Visibility;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
@@ -108,6 +110,8 @@ namespace KE.Utils.API.Features.SCPs
         private void OnChangingRole(ChangingRoleEventArgs ev)
         {
             Player player = ev.Player;
+            
+
             if (!AllSCP.Contains(player)) return;
 
             if (Primary.Contains(player))

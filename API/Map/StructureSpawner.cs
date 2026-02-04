@@ -1,4 +1,5 @@
-﻿using Interactables.Interobjects.DoorUtils;
+﻿using ZoneType = Exiled.API.Enums.ZoneType;
+using Interactables.Interobjects.DoorUtils;
 using InventorySystem.Items.Firearms.Attachments;
 using MapGeneration;
 using MapGeneration.Distributors;
@@ -9,11 +10,11 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace KE.Utils.API
+namespace KE.Utils.API.Map
 {
     public static class StructureSpawner
     {
-        public static Dictionary<FacilityZone, HashSet<DoorVariant>> AdditionalDoors { get; } = new();
+        public static Dictionary<ZoneType, HashSet<DoorVariant>> AdditionalDoors { get; } = new();
 
 
 
@@ -55,7 +56,7 @@ namespace KE.Utils.API
         }
 
 
-        public static DoorVariant SpawnDoor(DoorType doortype,Vector3 position,Quaternion rotation, Vector3 scale)
+        public static DoorVariant SpawnDoor(DoorType doortype,Vector3 position,Quaternion rotation, Vector3 scale,ZoneType? zone = null)
         {
             Vector3 absolutePosition = position;
             Quaternion absoluteRotation = rotation;
@@ -73,13 +74,18 @@ namespace KE.Utils.API
 
             NetworkServer.UnSpawn(doorVariant.gameObject);
             NetworkServer.Spawn(doorVariant.gameObject);
-            FacilityZone zone = doorVariant.transform.position.GetZone();
 
-            if (!AdditionalDoors.ContainsKey(zone))
+            ZoneType zone1 = zone ?? ZoneType.Unspecified;
+
+
+            if (!AdditionalDoors.ContainsKey(zone1))
             {
-                AdditionalDoors.Add(zone, new());
+                AdditionalDoors.Add(zone1, new());
             }
-            AdditionalDoors[zone].Add(doorVariant);
+
+
+            AdditionalDoors[zone1].Add(doorVariant);
+
 
 
             
