@@ -30,28 +30,7 @@ namespace KE.Utils.Extensions
         }
 
 
-        /// <summary>
-        /// Check if a <see cref="ZoneType"/> is Safe (Decontamination,Warhead)
-        /// </summary>
-        /// <returns>return true if the zone is safe for a <see cref="Player"/> ; false otherwise</returns>
-        public static bool IsSafe(this ZoneType zone)
-        {
-            bool result = true;
-            if (zone == ZoneType.LightContainment)
-            {
-                result = Map.DecontaminationState < DecontaminationState.Countdown;
-            }
-                
-            switch (zone)
-            {
-                case ZoneType.LightContainment:
-                case ZoneType.HeavyContainment:
-                case ZoneType.Entrance:
-                    result &= !Warhead.IsDetonated;
-                    break;
-            }
-            return result;
-        }
+
 
         //by @marcosvll2 on discord
         public static Vector3 GetValidPosition(this Room room)
