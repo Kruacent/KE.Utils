@@ -95,7 +95,7 @@ namespace KE.Utils.API.Sounds
         /// <param name="pos"></param>
         /// <param name="volume"></param>
         /// <param name="maxDistance"></param>
-        public void Play(string clipName, GameObject objectEmittingSound, float volume = 50f, float maxDistance = 20f, bool isSpatial = true)
+        public AudioClipPlayback Play(string clipName, GameObject objectEmittingSound, float volume = 1f, float maxDistance = 20f, bool isSpatial = true)
         {
             if (!Loaded) throw new Exception("clips not loaded use SoundPlayer.Instance.Load()");
             Log.Debug($"playing {clipName} at {objectEmittingSound}");
@@ -104,12 +104,14 @@ namespace KE.Utils.API.Sounds
             {
 
                 p.transform.parent = objectEmittingSound.transform;
+                p.transform.localPosition = Vector3.zero;
                 Speaker speaker = p.AddSpeaker("main", isSpatial: isSpatial, maxDistance: maxDistance, minDistance: 1f);
                 speaker.transform.parent = objectEmittingSound.transform;
                 speaker.transform.localPosition = Vector3.zero;
             });
-            audioPlayer.AddClip(clipName, volume: volume);
+
             audioPlayer.DestroyWhenAllClipsPlayed = true;
+            return audioPlayer.AddClip(clipName, volume: volume);
         }
     }
 }
