@@ -20,7 +20,6 @@ namespace KE.Utils.API.Features.SCPs
             {
                 Exiled.Events.Handlers.Server.EndingRound += OnRoundEnding;
                 LabApi.Events.Handlers.PlayerEvents.ChangedRole += OnChangedRole;
-                LabApi.Events.Handlers.PlayerEvents.Spawned += 
                 _event = true;
             }
 
