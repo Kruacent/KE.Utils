@@ -38,10 +38,7 @@ namespace KE.Utils.API.Features.SCPs
 
         private static void OnRoundEnding(EndingRoundEventArgs ev)
         {
-            if (ev.ClassList.mtf_and_guards != 0 || ev.ClassList.scientists != 0) ev.IsAllowed = false;
-            else if (ev.ClassList.class_ds != 0 || ev.ClassList.chaos_insurgents != 0) ev.IsAllowed = false;
-            else if (SCPTeam.SCPs.Count > 0) ev.IsAllowed = true;
-            else ev.IsAllowed = true;
+
 
         }
         private static void OnChangedRole(PlayerChangedRoleEventArgs ev)
