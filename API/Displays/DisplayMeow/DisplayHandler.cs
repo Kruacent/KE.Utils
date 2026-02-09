@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features;
+using Hints;
 using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Models.Hints;
@@ -105,6 +106,11 @@ namespace KE.Utils.API.Displays.DisplayMeow
         public void RemoveHint(Player player, AbstractHint hint)
         {
             PlayerDisplay.Get(player).RemoveHint(hint);
+        }
+
+        public bool HasHint(Player player,HintPlacement placement)
+        {
+            return PlayerDisplay.Get(player).HasHint(placement.GetId(player));
         }
 
 
