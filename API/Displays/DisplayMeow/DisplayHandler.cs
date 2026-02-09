@@ -97,5 +97,16 @@ namespace KE.Utils.API.Displays.DisplayMeow
             return gint;
         }
 
+
+        public void RemoveHint(Player player,HintPlacement placement)
+        {
+            PlayerDisplay.Get(player).RemoveHint(placement.GetId(player));
+        }
+        public void RemoveHint(Player player, AbstractHint hint)
+        {
+            PlayerDisplay.Get(player).RemoveHint(hint);
+        }
+
+
     }
 }
