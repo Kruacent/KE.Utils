@@ -87,6 +87,7 @@ namespace KE.Utils.API.CustomStats.GUI
         }
 
 
+        /*
         private void Update()
         {
             CustomStatBar[] stats = _cps.StatBars;
@@ -104,9 +105,9 @@ namespace KE.Utils.API.CustomStats.GUI
                     //show
                 }
             }
-
+            
         }
-
+        */
 
 
 
