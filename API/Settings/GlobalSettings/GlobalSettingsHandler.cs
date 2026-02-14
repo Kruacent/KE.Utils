@@ -59,12 +59,6 @@ namespace KE.Utils.API.Settings.GlobalSettings
 
             }
 
-            if(GlobalSetting.Header != null)
-            {
-                settingsbase.Add(GlobalSetting.Header);
-            }
-            
-
             
             SettingBase.Register(settingsbase);
 
