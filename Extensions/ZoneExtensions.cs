@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Enums;
 using Exiled.API.Features;
+using KE.Utils.API.Translations;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -43,6 +44,25 @@ namespace KE.Utils.Extensions
                 ZoneType.Entrance => "Entrance Zone",
                 ZoneType.Surface => "Surface Zone",
                 _ => "Not found"
+            };
+        }
+
+        public static string GetTranslatedName(this ZoneType zone,string lang)
+        {
+            if(lang == TranslationHub.DefaultLang)
+            {
+                return zone.GetName();
+            }
+
+
+
+            return zone switch
+            {
+                ZoneType.LightContainment => "la Zone de Confinement Léger",
+                ZoneType.HeavyContainment => "la Zone de Confinement Lourd",
+                ZoneType.Entrance => "l’Entrée",
+                ZoneType.Surface => "la Surface",
+                _ => "Pas trouvé"
             };
         }
 

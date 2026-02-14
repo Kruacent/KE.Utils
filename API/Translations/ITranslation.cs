@@ -1,5 +1,9 @@
-﻿public interface ILocalizable
+﻿
+namespace KE.Utils.API.Translations
 {
-    string LocalizationId { get; }
-    void RegisterTranslations();
+    public interface ILocalizable
+    {
+        string LocalizationId { get; }
+        void RegisterTranslations();
+    }
 }
