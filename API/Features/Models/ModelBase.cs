@@ -1,37 +1,37 @@
-﻿using Exiled.API.Features;
+﻿using AdminToys;
+using Exiled.API.Features;
 using Exiled.API.Features.Toys;
 using Exiled.API.Structs;
+using KE.Utils.API.Features.Models.Interfaces;
 using Mirror;
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
-using YamlDotNet.Serialization.NamingConventions;
 using Light = Exiled.API.Features.Toys.Light;
 
 namespace KE.Utils.API.Features.Models
 {
-    public abstract class ModelBase
+    public abstract class ModelBase : IModel
     {
 
-        private HashSet<Transform> Transform = new();
+        protected HashSet<Transform> Transform = new();
 
-        public void Create(Transform parent)
+        public virtual bool Create(Transform parent)
         {
             try
             {
                 CreateModel(parent);
-                Transform.Add(parent);
+                
+                return Transform.Add(parent);
             }
             catch(Exception e)
             {
                 Log.Error(e);
+                return false;
             }
         }
 
-        public void Destroy(Transform parent)
+        public virtual void Destroy(Transform parent)
         {
             NetworkServer.Destroy(parent.gameObject);
         }
@@ -42,8 +42,8 @@ namespace KE.Utils.API.Features.Models
 
 
 
-        private static PrimitiveSettings baseSettings = new(PrimitiveType.Cube, AdminToys.PrimitiveFlags.Visible, Color.white, Vector3.zero, Vector3.zero, Vector3.one, false);
-        protected static Primitive CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition,Quaternion localRotation,Vector3 localScale,Color32 color)
+        public static readonly PrimitiveSettings baseSettings = new(PrimitiveType.Cube, AdminToys.PrimitiveFlags.Visible, Color.white, Vector3.zero, Vector3.zero, Vector3.one, false);
+        protected static PrimitiveObjectToy CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition,Quaternion localRotation,Vector3 localScale,Color32 color)
         {
             Primitive prim = Primitive.Create(baseSettings);
             
@@ -57,7 +57,24 @@ namespace KE.Utils.API.Features.Models
             prim.MovementSmoothing = 0;
             prim.Spawn();
 
-            return prim;
+            return prim.Base;
+        }
+
+        protected static PrimitiveObjectToy CreateEmptyPrimitive(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+        {
+            Primitive prim = Primitive.Create(baseSettings);
+
+
+            prim.Transform.parent = parent;
+            prim.Transform.localPosition = localPosition;
+            prim.Transform.localRotation = localRotation;
+            prim.Transform.localScale = localScale;
+            prim.MovementSmoothing = 0;
+            prim.Flags = PrimitiveFlags.None;
+
+            prim.Spawn();
+
+            return prim.Base;
         }
 
         protected static Light CreateLight(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, Color32 color,LightType lightType,float intensity)
