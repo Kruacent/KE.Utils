@@ -54,16 +54,20 @@ namespace KE.Utils.Extensions
                 return zone.GetName();
             }
 
-
-
-            return zone switch
+            if(lang == "fr")
             {
-                ZoneType.LightContainment => "la Zone de Confinement Léger",
-                ZoneType.HeavyContainment => "la Zone de Confinement Lourd",
-                ZoneType.Entrance => "l’Entrée",
-                ZoneType.Surface => "la Surface",
-                _ => "Pas trouvé"
-            };
+                return zone switch
+                {
+                    ZoneType.LightContainment => "la Zone de Confinement Léger",
+                    ZoneType.HeavyContainment => "la Zone de Confinement Lourd",
+                    ZoneType.Entrance => "l’Entrée",
+                    ZoneType.Surface => "la Surface",
+                    _ => "Pas trouvé"
+                };
+            }
+
+            return "Pas trouvé";
+
         }
 
 

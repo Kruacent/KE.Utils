@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Translations;
+using KE.Utils.API.Translations.Events;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -21,10 +22,13 @@ namespace KE.Utils.API.Settings.GlobalSettings
 
         public void OnChanged(Player player,SettingBase setting)
         {
-            OnTranslationChange?.Invoke(player);
+            string newLang = TranslationHub.GetLang(player);
+
+
+            Handler.OnTranslationChanged(new(player, newLang));
         }
 
 
-        public static event Action<Player> OnTranslationChange = delegate { };
+        
     }
 }
