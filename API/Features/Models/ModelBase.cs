@@ -42,8 +42,8 @@ namespace KE.Utils.API.Features.Models
 
 
 
-        public static readonly PrimitiveSettings baseSettings = new(PrimitiveType.Cube, AdminToys.PrimitiveFlags.Visible, Color.white, Vector3.zero, Vector3.zero, Vector3.one, false);
-        protected static PrimitiveObjectToy CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition,Quaternion localRotation,Vector3 localScale,Color32 color)
+        public static readonly PrimitiveSettings baseSettings = new(PrimitiveType.Cube, AdminToys.PrimitiveFlags.Visible | PrimitiveFlags.Collidable, Color.white, Vector3.zero, Vector3.zero, Vector3.one, false);
+        protected PrimitiveObjectToy CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition,Quaternion localRotation,Vector3 localScale,Color32 color)
         {
             Primitive prim = Primitive.Create(baseSettings);
             
@@ -60,7 +60,7 @@ namespace KE.Utils.API.Features.Models
             return prim.Base;
         }
 
-        protected static PrimitiveObjectToy CreateEmptyPrimitive(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+        protected PrimitiveObjectToy CreateEmptyPrimitive(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
         {
             Primitive prim = Primitive.Create(baseSettings);
 
@@ -77,7 +77,7 @@ namespace KE.Utils.API.Features.Models
             return prim.Base;
         }
 
-        protected static Light CreateLight(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, Color32 color,LightType lightType,float intensity)
+        protected Light CreateLight(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, Color32 color,LightType lightType,float intensity)
         {
             Light light = Light.Create(null, null, null, false);
 
@@ -95,6 +95,31 @@ namespace KE.Utils.API.Features.Models
 
             return light;
         }
+
+        protected InteractableToy CreateInteractable(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, InvisibleInteractableToy.ColliderShape shape)
+        {
+            InteractableToy interactable = InteractableToy.Create(parent, shape,0,false,false);
+
+            interactable.Transform.localPosition = localPosition;
+            interactable.Transform.localRotation = localRotation;
+            interactable.Transform.localScale = localScale;
+            interactable.MovementSmoothing = 0;
+
+            interactable.Spawn();
+
+            return interactable;
+        }
+
+        protected Waypoint CreateWaypoint(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+        {
+            Waypoint waypoint = Waypoint.Create(parent, localPosition, localRotation, localScale, 0, true, false);
+            waypoint.MovementSmoothing = 0;
+
+            waypoint.Spawn();
+
+            return waypoint;
+        }
+
 
 
     }
