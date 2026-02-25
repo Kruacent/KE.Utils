@@ -1,6 +1,6 @@
 ﻿using Exiled.API.Features;
 using KE.Utils.API.Interfaces;
-using KE.Utils.API.Settings.EventArgs;
+using KE.Utils.API.Settings.SettingsPages.EventArgs;
 using LabApi.Events.Arguments.PlayerEvents;
 using MEC;
 using System;
@@ -10,7 +10,7 @@ using System.Text;
 using System.Threading.Tasks;
 using UserSettings.ServerSpecific;
 
-namespace KE.Utils.API.Settings
+namespace KE.Utils.API.Settings.SettingsPages
 {
     public class SettingHandler : IUsingEvents
     {

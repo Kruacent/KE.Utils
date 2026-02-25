@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using UserSettings.ServerSpecific;
 using UserSettings.ServerSpecific.Examples;
 
-namespace KE.Utils.API.Settings
+namespace KE.Utils.API.Settings.SettingsPages
 {
     public class SettingsPage
     {

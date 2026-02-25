@@ -6,8 +6,10 @@ using KE.Utils.API.Features.Models.Interfaces;
 using Mirror;
 using System;
 using System.Collections.Generic;
+using System.Runtime.InteropServices;
 using UnityEngine;
 using Light = Exiled.API.Features.Toys.Light;
+using TextToy = LabApi.Features.Wrappers.TextToy;
 
 namespace KE.Utils.API.Features.Models
 {
@@ -42,8 +44,8 @@ namespace KE.Utils.API.Features.Models
 
 
 
-        public static readonly PrimitiveSettings baseSettings = new(PrimitiveType.Cube, AdminToys.PrimitiveFlags.Visible | PrimitiveFlags.Collidable, Color.white, Vector3.zero, Vector3.zero, Vector3.one, false);
-        protected PrimitiveObjectToy CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition,Quaternion localRotation,Vector3 localScale,Color32 color)
+        public static readonly PrimitiveSettings baseSettings = new(PrimitiveType.Cube, AdminToys.PrimitiveFlags.Visible, Color.white, Vector3.zero, Vector3.zero, Vector3.one, false);
+        protected virtual PrimitiveObjectToy CreatePrimitive(Transform parent, PrimitiveType type, Vector3 localPosition,Quaternion localRotation,Vector3 localScale,Color32 color,byte movementSmoothing = 0,bool collidable = true)
         {
             Primitive prim = Primitive.Create(baseSettings);
             
@@ -54,7 +56,10 @@ namespace KE.Utils.API.Features.Models
             prim.Transform.localRotation = localRotation;
             prim.Transform.localScale = localScale;
             prim.Color = color;
-            prim.MovementSmoothing = 0;
+            prim.MovementSmoothing = movementSmoothing;
+
+            prim.Collidable = collidable;
+
             prim.Spawn();
 
             return prim.Base;
@@ -77,7 +82,7 @@ namespace KE.Utils.API.Features.Models
             return prim.Base;
         }
 
-        protected Light CreateLight(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, Color32 color,LightType lightType,float intensity)
+        protected Light CreateLight(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale, Color32 color,LightType lightType,float intensity,float range)
         {
             Light light = Light.Create(null, null, null, false);
 
@@ -85,6 +90,7 @@ namespace KE.Utils.API.Features.Models
             light.Transform.parent = parent;
             light.Intensity = intensity;
             light.LightType = lightType;
+            light.Range = range;
             light.Transform.localPosition = localPosition;
             light.Transform.localRotation = localRotation;
             light.Transform.localScale = localScale;
@@ -121,6 +127,17 @@ namespace KE.Utils.API.Features.Models
         }
 
 
+
+        protected TextToy CreateText(Transform parent, Vector3 localPosition, Quaternion localRotation, Vector3 localScale)
+        {
+            TextToy text = TextToy.Create(localPosition, localRotation, localScale, parent, false);
+            text.MovementSmoothing = 0;
+
+            text.Spawn();
+
+            return text;
+
+        }
 
     }
 }
