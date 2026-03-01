@@ -38,23 +38,15 @@ namespace KE.Utils.Extensions
 
 
 
-        public static void AddLevelEffect(this Player p,EffectType type, int intensity)
+        public static void AddLevelEffect<T>(this Player player, int addintensity) where T : StatusEffectBase
         {
-            
+
+            T effect = player.GetEffect<T>();
 
 
-            if (p.TryGetEffect(type, out var effect))
-            {
-                byte newIntensity =(byte) Mathf.Clamp(effect.Intensity + intensity,byte.MinValue,byte.MaxValue);
+            byte newIntensity = (byte)Mathf.Clamp(effect.Intensity + addintensity, byte.MinValue, byte.MaxValue);
 
-                p.ChangeEffectIntensity(type, newIntensity);
-            }
-            else
-            {
-                byte newIntensity = (byte)Mathf.Clamp(intensity, byte.MinValue, byte.MaxValue);
-                p.EnableEffect(type, newIntensity);
-            }
-
+            effect.Intensity = newIntensity;
 
         }
 
