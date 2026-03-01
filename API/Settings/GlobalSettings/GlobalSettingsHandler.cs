@@ -85,7 +85,7 @@ namespace KE.Utils.API.Settings.GlobalSettings
 
         public void SubscribeEvents()
         {
-            if (!_event) return;
+            if (_event) return;
 
             LabApi.Events.Handlers.PlayerEvents.Joined += AddPlayer;
             _event = true;
@@ -95,7 +95,7 @@ namespace KE.Utils.API.Settings.GlobalSettings
 
         public void UnsubscribeEvents()
         {
-            if (_event) return;
+            if (!_event) return;
             LabApi.Events.Handlers.PlayerEvents.Joined -= AddPlayer;
             _event = false;
         }
