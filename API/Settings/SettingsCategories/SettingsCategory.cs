@@ -53,7 +53,7 @@ namespace KE.Utils.API.Settings.SettingsCategories
 
 
 
-        public static void Register(bool reset = false)
+        public static void Register(bool reset = false,bool sendToAll =true)
         {
 
             List<SettingsCategory> orderedList = _list.OrderByDescending(s => s.Priority).ToList();
@@ -74,8 +74,11 @@ namespace KE.Utils.API.Settings.SettingsCategories
             }
 
 
-
-            SettingBase.SendToAll();
+            if (sendToAll)
+            {
+                SettingBase.SendToAll();
+            }
+            
         }
 
 
