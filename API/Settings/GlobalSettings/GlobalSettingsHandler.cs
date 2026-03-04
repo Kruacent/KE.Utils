@@ -1,6 +1,7 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
 using KE.Utils.API.Interfaces;
+using KE.Utils.API.Settings.SettingsCategories;
 using LabApi.Events.Arguments.PlayerEvents;
 using System;
 using System.Collections;
@@ -49,18 +50,16 @@ namespace KE.Utils.API.Settings.GlobalSettings
             settings = ReflectionHelper.GetObjects<GlobalSetting>();
 
 
-            settingsbase = new(settings.Count());
 
             foreach (GlobalSetting setting in settings)
             {
                 setting.Create();
-                settingsbase.Add(setting.Setting);
-
-
+                setting.GetCategory();
+                
             }
 
             
-            SettingBase.Register(settingsbase);
+            
 
         }
 

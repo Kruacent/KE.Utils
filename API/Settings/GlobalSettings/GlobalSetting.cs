@@ -1,4 +1,5 @@
 ﻿using Exiled.API.Features.Core.UserSettings;
+using KE.Utils.API.Settings.SettingsCategories;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -12,6 +13,8 @@ namespace KE.Utils.API.Settings.GlobalSettings
         public SettingBase Setting { get; private set; }
 
         public static HeaderSetting Header { get; private set; }
+
+        private SettingsCategory category = null;
 
         public void Create()
         {
@@ -28,6 +31,14 @@ namespace KE.Utils.API.Settings.GlobalSettings
 
 
 
+        public SettingsCategory GetCategory()
+        {
+            if (category == null)
+            {
+                category = new SettingsCategory(Header, ushort.MaxValue, [Setting]);
+            }
+            return category;
+        }
 
 
     }
