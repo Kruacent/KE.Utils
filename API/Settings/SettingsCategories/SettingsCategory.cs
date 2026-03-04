@@ -28,7 +28,7 @@ namespace KE.Utils.API.Settings.SettingsCategories
 
             Priority = priority;
             Header = header;
-            Header.Label += priority.ToString();
+            //Header.Label += priority.ToString();
 
             Settings = settings.ToList();
 
