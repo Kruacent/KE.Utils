@@ -87,6 +87,7 @@ namespace KE.Utils.API.Settings.GlobalSettings
             if (_event) return;
 
             LabApi.Events.Handlers.PlayerEvents.Joined += AddPlayer;
+            Exiled.Events.Handlers.Server.WaitingForPlayers += OnWaitingForPlayers;
             _event = true;
 
 
@@ -96,13 +97,18 @@ namespace KE.Utils.API.Settings.GlobalSettings
         {
             if (!_event) return;
             LabApi.Events.Handlers.PlayerEvents.Joined -= AddPlayer;
+            Exiled.Events.Handlers.Server.WaitingForPlayers -= OnWaitingForPlayers;
             _event = false;
+        }
+        private void OnWaitingForPlayers()
+        {
+            SettingsCategory.Register();
         }
 
         private void AddPlayer(PlayerJoinedEventArgs ev)
         {
             Log.Info("join");
-            ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
+            //ServerSpecificSettingsSync.SendToPlayer(ev.Player.ReferenceHub);
         }
     }
 }

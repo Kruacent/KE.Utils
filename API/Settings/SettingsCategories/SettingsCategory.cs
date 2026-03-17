@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Features.Core.UserSettings;
+using KE.Utils.API.Features;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -53,34 +54,49 @@ namespace KE.Utils.API.Settings.SettingsCategories
 
 
 
-        public static void Register(bool reset = false,bool sendToAll =true)
+        public static IReadOnlyCollection<SettingBase> AllSettings { get; private set; }
+
+
+        public static void Register()
         {
+            if (locked) return;
 
             List<SettingsCategory> orderedList = _list.OrderByDescending(s => s.Priority).ToList();
-            List<SettingBase> AllSettings = new();
+            List<SettingBase> allSettings = new();
 
-            for(int i = 0; i < orderedList.Count; i++)
+            for (int i = 0; i < orderedList.Count; i++)
             {
-                AllSettings.AddRange(orderedList[i].Conct());
-            }
-
-            if (reset)
-            {
-                ServerSpecificSettingsSync.DefinedSettings = AllSettings.Select((SettingBase s) => s.Base).ToArray();
-            }
-            else
-            {
-                ServerSpecificSettingsSync.DefinedSettings = (ServerSpecificSettingsSync.DefinedSettings ?? Array.Empty<ServerSpecificSettingBase>()).Concat(AllSettings.Select((SettingBase s) => s.Base)).ToArray();
+                allSettings.AddRange(orderedList[i].Conct());
             }
 
 
-            if (sendToAll)
-            {
-                SettingBase.SendToAll();
-            }
+            AllSettings = allSettings.AsReadOnly();
+            ServerSpecificSettingsSync.DefinedSettings = AllSettings.Select(s => s.Base).ToArray();
+
+            locked = true;
+            //ServerSpecificSettingsSync.DefinedSettings = new ServerSpecificSettingBase[1];
+            //ServerSpecificSettingsSync.SendOnJoinFilter = (ReferenceHub hub) =>
+            //{
+            //    return false;
+            //};
+
+
+            //KELog.Debug("allsettings length"+ AllSettings.Count);
+            //KELog.Debug("definedsettings length" + ServerSpecificSettingsSync.DefinedSettings.Length);
+
+            //if (reset)
+            //{
+            //    ServerSpecificSettingsSync.DefinedSettings = AllSettings.Select((SettingBase s) => s.Base).ToArray();
+            //}
+            //else
+            //{
             
+            //}
+
+            SettingBase.SendToAll();
         }
 
+        private static bool locked = false;
 
     }
 }
