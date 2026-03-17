@@ -47,11 +47,13 @@ namespace KE.Utils.API.KETextToy
                         dir.Normalize();
                     }
 
-                    Quaternion rot = Quaternion.LookRotation(dir) * Quaternion.Euler(0f, 180f, 0f);
+                    if (dir.Equals(Vector3.zero))
+                    {
+                        Quaternion rot = Quaternion.LookRotation(dir) * Quaternion.Euler(0f, 180f, 0f);
+                        player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkRotation), rot);
+                    }
 
                     
-
-                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkRotation), rot);
                 }
                 else
                 {
