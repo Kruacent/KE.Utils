@@ -80,22 +80,40 @@ namespace KE.Utils.API.Displays.DisplayMeow
         }
 
 
-        public MHint CreateAuto(Player player, TextUpdateHandler update, HintPlacement hintPlacement, HintSyncSpeed syncSpeed = HintSyncSpeed.Fastest)
+        public AbstractHint CreateAuto(Player player, TextUpdateHandler update, HintPlacement hintPlacement, HintSyncSpeed syncSpeed = HintSyncSpeed.Fastest)
         {
+            var dis = PlayerDisplay.Get(player);
             string id = hintPlacement.GetId(player);
-            Log.Info("auto at " + id);
-            var gint = new MHint()
-            {
-                XCoordinate = hintPlacement.XCoordinate,
-                YCoordinate = hintPlacement.YCoordinate,
-                Alignment = hintPlacement.HintAlignment,
-                AutoText = update,
-                SyncSpeed = syncSpeed,
-                Id = id
-            };
 
-            PlayerDisplay.Get(player).AddHint(gint);
-            return gint;
+            AbstractHint hint;
+
+
+            if (!dis.TryGetHint(id, out var aHint))
+            {
+
+                hint = new MHint()
+                {
+                    XCoordinate = hintPlacement.XCoordinate,
+                    YCoordinate = hintPlacement.YCoordinate,
+                    Alignment = hintPlacement.HintAlignment,
+                    AutoText = update,
+                    SyncSpeed = syncSpeed,
+                    Id = id
+
+                };
+                dis.AddHint(hint);
+
+            }
+            else
+            {
+                hint = aHint;
+                hint.SyncSpeed = syncSpeed;
+                hint.AutoText = update;
+                hint.Hide = false;
+            }
+
+            Log.Info("auto at " + id);
+            return hint;
         }
 
 
