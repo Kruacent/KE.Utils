@@ -1,6 +1,5 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Enums;
-using Discord;
 using System.Linq;
 using Exiled.API.Extensions;
 using UnityEngine;
@@ -74,6 +73,10 @@ namespace KE.Utils.Extensions
                 case RoomType.EzShelter:
                     offset = new Vector3(0f, 1f, 4.26f);
                     break;
+                case RoomType.HczIncineratorWayside:
+                    offset = new Vector3(0, 1f, -6);
+                    break;
+                        
 
             }
             return room.WorldPosition(offset) + Vector3.up;
