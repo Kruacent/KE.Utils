@@ -13,7 +13,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Xml.Linq;
 
-namespace KE.Items.Utils
+namespace KE.Utils.API.Displays.Feeds
 {
     public class HintFeed
     {

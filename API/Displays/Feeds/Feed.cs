@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Items.Utils
+namespace KE.Utils.API.Displays.Feeds
 {
     public sealed class Feed
     {

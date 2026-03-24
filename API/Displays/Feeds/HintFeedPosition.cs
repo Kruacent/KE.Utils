@@ -4,7 +4,7 @@ using KE.Utils.API.Displays.DisplayMeow.Placements;
 using KE.Utils.API.Features;
 using System.Collections.Generic;
 
-namespace KE.Items.Utils
+namespace KE.Utils.API.Displays.Feeds
 {
     public sealed class HintFeedPosition : HintPosition
     {
