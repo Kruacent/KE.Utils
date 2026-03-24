@@ -47,7 +47,7 @@ namespace KE.Utils.API.KETextToy
                         dir.Normalize();
                     }
 
-                    if (dir.Equals(Vector3.zero))
+                    if (!dir.Equals(Vector3.zero))
                     {
                         Quaternion rot = Quaternion.LookRotation(dir) * Quaternion.Euler(0f, 180f, 0f);
                         player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkRotation), rot);
@@ -72,7 +72,12 @@ namespace KE.Utils.API.KETextToy
         private static CoroutineHandle handle;
         public static void Start()
         {
-            Timing.RunCoroutineSingleton(Loop(), handle, SingletonBehavior.Abort);
+            if (!Timing.IsRunning(handle))
+            {
+                Log.Info("starting followingTextToy");
+                handle = Timing.RunCoroutine(Loop());
+            }
+
         }
 
         public static void Stop()
