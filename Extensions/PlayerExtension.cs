@@ -45,13 +45,24 @@ namespace KE.Utils.Extensions
 
             T effect = player.GetEffect<T>();
 
+            AddLevelEffect(player, effect, addintensity);
+        }
 
+        
+
+        public static void AddLevelEffect(this Player player, EffectType effect, int addintensity)
+        {
+            StatusEffectBase effectBase = player.GetEffect(effect);
+
+            AddLevelEffect(player, effect, addintensity);
+        }
+
+        private static void AddLevelEffect(Player player, StatusEffectBase effect, int addintensity)
+        {
             byte newIntensity = (byte)Mathf.Clamp(effect.Intensity + addintensity, byte.MinValue, byte.MaxValue);
 
             effect.Intensity = newIntensity;
-
         }
-
 
         public static void ChangeRole(this Player player,RoleTypeId newRole,SpawnReason spawnReason,RoleSpawnFlags spawnFlags)
         {
