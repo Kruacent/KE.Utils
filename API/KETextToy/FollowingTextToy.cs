@@ -20,13 +20,16 @@ namespace KE.Utils.API.KETextToy
         public HashSet<Player> Following { get; }
         public TextToy Toy { get; }
 
+        public string Text { get; set; }
+        public const string EmptyText = " ";
+
         public bool OnlyMoveY { get; set; } = false;
 
 
         public FollowingTextToy(IEnumerable<Player> players, Vector3 position, Quaternion rotation, Vector3 scale)
         {
             Following = players.ToHashSet();
-            Toy = TextToy.Create(position, rotation, scale, null, true);
+            Toy = TextToy.Create(position, rotation, scale, null, false);
             Toy.MovementSmoothing = 0;
             list.Add(this);
             Start();
@@ -53,11 +56,12 @@ namespace KE.Utils.API.KETextToy
                         player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkRotation), rot);
                     }
 
-                    
+
+                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.Network_textFormat), Text);
                 }
                 else
                 {
-                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkScale), Vector3.zero);
+                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.Network_textFormat), EmptyText);
                 }
 
                 
@@ -72,7 +76,7 @@ namespace KE.Utils.API.KETextToy
         private static CoroutineHandle handle;
         public static void Start()
         {
-            if (!Timing.IsRunning(handle))
+            if (!handle.IsRunning)
             {
                 Log.Info("starting followingTextToy");
                 handle = Timing.RunCoroutine(Loop());
@@ -83,6 +87,25 @@ namespace KE.Utils.API.KETextToy
         public static void Stop()
         {
             Timing.KillCoroutines(handle);
+        }
+
+        public static bool IsRunning
+        {
+            get
+            {
+                return handle.IsRunning;
+            }
+            set
+            {
+                if (value)
+                {
+                    Start();
+                }
+                else
+                {
+                    Stop();
+                }
+            }
         }
 
 
