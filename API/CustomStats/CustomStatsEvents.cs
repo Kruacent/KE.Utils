@@ -32,7 +32,7 @@ namespace KE.Utils.API.CustomStats
 
         private static void OnJoined(LabApi.Events.Arguments.PlayerEvents.PlayerJoinedEventArgs ev)
         {
-            ev.Player.ReferenceHub.gameObject.AddComponent<CustomPlayerStat>();
+            //ev.Player.ReferenceHub.gameObject.AddComponent<CustomPlayerStat>();
         }
     }
 }
