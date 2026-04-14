@@ -49,15 +49,11 @@ namespace KE.Utils.API.Features.SCPs
         {
             int nbFactionAlive = 0;
             leadingTeam = LeadingTeam.Draw;
-            if (scp > 0)
+
+            if (flamingo > 0)
             {
                 nbFactionAlive++;
-                leadingTeam = LeadingTeam.Anomalies;
-            }
-            if (mtf > 0)
-            {
-                nbFactionAlive++;
-                leadingTeam = LeadingTeam.FacilityForces;
+                leadingTeam = LeadingTeam.Flamingo;
             }
             if (chaos > 0)
             {
@@ -65,10 +61,17 @@ namespace KE.Utils.API.Features.SCPs
                 leadingTeam = LeadingTeam.ChaosInsurgency;
             }
             
-            if (flamingo > 0)
+            
+            if (mtf > 0)
             {
                 nbFactionAlive++;
-                leadingTeam = LeadingTeam.Flamingo;
+                leadingTeam = LeadingTeam.FacilityForces;
+            }
+
+            if (scp > 0)
+            {
+                nbFactionAlive++;
+                leadingTeam = LeadingTeam.Anomalies;
             }
 
             return nbFactionAlive <= 1;

@@ -21,7 +21,7 @@ namespace KE.Utils.Extensions
             bool result = true;
             if (zone == ZoneType.LightContainment)
             {
-                result = Map.DecontaminationState < DecontaminationState.Countdown;
+                result = Exiled.API.Features.Map.DecontaminationState < DecontaminationState.Countdown;
             }
 
             switch (zone)
