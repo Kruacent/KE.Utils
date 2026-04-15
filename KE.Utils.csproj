@@ -6,13 +6,14 @@
 	</PropertyGroup>
 
 	<ItemGroup>
-		<PackageReference Include="ExMod.Exiled" Version="9.10.2" />
+		<PackageReference Include="ExMod.Exiled" Version="9.13.1" />
 		<PackageReference Include="Newtonsoft.Json" Version="13.0.4" />
 	</ItemGroup>
 
 	<ItemGroup>
 		<Reference Include="Assembly-CSharp-firstpass" HintPath="$(EXILED_REFERENCES)\Assembly-CSharp-firstpass.dll" />
 		<Reference Include="HintServiceMeow" HintPath="$(EXILED_REFERENCES)\HintServiceMeow-Exiled.dll" />
+		<Reference Include="RueI" HintPath="$(EXILED_REFERENCES)\RueI.dll" />
 		<Reference Include="System.ComponentModel.Composition" HintPath="$(EXILED_REFERENCES)\System.ComponentModel.Composition.dll" />
 		<Reference Include="UnityEngine.CoreModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.CoreModule.dll" />
 		<Reference Include="UnityEngine" HintPath="$(EXILED_REFERENCES)\UnityEngine.dll" />
@@ -20,7 +21,9 @@
 		<Reference Include="ProjectMER" HintPath="$(EXILED_REFERENCES)\ProjectMER.dll" />
 		<Reference Include="Unity.TextMeshPro" HintPath="$(EXILED_REFERENCES)\Unity.TextMeshPro.dll" />
 		<Reference Include="UnityEngine.PhysicsModule" HintPath="$(EXILED_REFERENCES)\UnityEngine.PhysicsModule.dll" />
+		<Reference Include="KruacentExiled" HintPath="$(EXILED_DEV_REFERENCES)\Plugins\KruacentExiled.dll" />
 		<Reference Include="Mirror" HintPath="$(EXILED_REFERENCES)\Mirror.dll" />
+		<Reference Include="Pooling" HintPath="$(EXILED_REFERENCES)\Pooling.dll" />
 	</ItemGroup>
 
 	<PropertyGroup Condition=" '$(OS)' == 'Windows_NT' ">

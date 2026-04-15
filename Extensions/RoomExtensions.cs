@@ -1,6 +1,5 @@
 ﻿using Exiled.API.Features;
 using Exiled.API.Enums;
-using Discord;
 using System.Linq;
 using Exiled.API.Extensions;
 using UnityEngine;
@@ -30,25 +29,7 @@ namespace KE.Utils.Extensions
         }
 
 
-        /// <summary>
-        /// Check if a <see cref="ZoneType"/> is Safe (Decontamination,Warhead)
-        /// </summary>
-        /// <returns>return true if the zone is safe for a <see cref="Player"/> ; false otherwise</returns>
-        public static bool IsSafe(this ZoneType zone)
-        {
-            bool result = true;
-            if (zone == ZoneType.LightContainment)
-                result = Map.DecontaminationState < DecontaminationState.Countdown;
-            switch (zone)
-            {
-                case ZoneType.LightContainment:
-                case ZoneType.HeavyContainment:
-                case ZoneType.Entrance:
-                    result = !Warhead.IsDetonated;
-                    break;
-            }
-            return result;
-        }
+
 
         //by @marcosvll2 on discord
         public static Vector3 GetValidPosition(this Room room)
@@ -92,6 +73,10 @@ namespace KE.Utils.Extensions
                 case RoomType.EzShelter:
                     offset = new Vector3(0f, 1f, 4.26f);
                     break;
+                case RoomType.HczIncineratorWayside:
+                    offset = new Vector3(0, 1f, -6);
+                    break;
+                        
 
             }
             return room.WorldPosition(offset) + Vector3.up;

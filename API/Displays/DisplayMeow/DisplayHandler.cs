@@ -1,4 +1,6 @@
 ﻿using Exiled.API.Features;
+using Hints;
+using HintServiceMeow.Core.Enum;
 using HintServiceMeow.Core.Extension;
 using HintServiceMeow.Core.Models.Hints;
 using HintServiceMeow.Core.Utilities;
@@ -28,9 +30,6 @@ namespace KE.Utils.API.Displays.DisplayMeow
             var dis = PlayerDisplay.Get(player);
             string id = hintPlacement.GetId(player);
             AbstractHint hint;
-
-
-            
             if (!dis.TryGetHint(id, out var aHint))
             {
 
@@ -52,11 +51,14 @@ namespace KE.Utils.API.Displays.DisplayMeow
                 hint.Hide = false;
                 hint.Text = text;
             }
+            
 
             
             hint.HideAfter(delay);
             return hint;
         }
+
+
 
         public void HideHint(HintPlacement hintPlacement, Player player,bool hide = true)
         {
@@ -78,23 +80,57 @@ namespace KE.Utils.API.Displays.DisplayMeow
         }
 
 
-        public MHint CreateAuto(Player player, TextUpdateHandler update, HintPlacement hintPlacement)
+        public AbstractHint CreateAuto(Player player, TextUpdateHandler update, HintPlacement hintPlacement, HintSyncSpeed syncSpeed = HintSyncSpeed.Fastest)
         {
+            var dis = PlayerDisplay.Get(player);
             string id = hintPlacement.GetId(player);
-            Log.Info("auto at " + id);
-            var gint = new MHint()
-            {
-                XCoordinate = hintPlacement.XCoordinate,
-                YCoordinate = hintPlacement.YCoordinate,
-                Alignment = hintPlacement.HintAlignment,
-                AutoText = update,
-                SyncSpeed = HintServiceMeow.Core.Enum.HintSyncSpeed.Fastest,
-                Id = id
-            };
 
-            PlayerDisplay.Get(player).AddHint(gint);
-            return gint;
+            AbstractHint hint;
+
+
+            if (!dis.TryGetHint(id, out var aHint))
+            {
+
+                hint = new MHint()
+                {
+                    XCoordinate = hintPlacement.XCoordinate,
+                    YCoordinate = hintPlacement.YCoordinate,
+                    Alignment = hintPlacement.HintAlignment,
+                    AutoText = update,
+                    SyncSpeed = syncSpeed,
+                    Id = id
+
+                };
+                dis.AddHint(hint);
+
+            }
+            else
+            {
+                hint = aHint;
+                hint.SyncSpeed = syncSpeed;
+                hint.AutoText = update;
+                hint.Hide = false;
+            }
+
+            Log.Info("auto at " + id);
+            return hint;
         }
+
+
+        public void RemoveHint(Player player,HintPlacement placement)
+        {
+            PlayerDisplay.Get(player).RemoveHint(placement.GetId(player));
+        }
+        public void RemoveHint(Player player, AbstractHint hint)
+        {
+            PlayerDisplay.Get(player).RemoveHint(hint);
+        }
+
+        public bool HasHint(Player player,HintPlacement placement)
+        {
+            return PlayerDisplay.Get(player).HasHint(placement.GetId(player));
+        }
+
 
     }
 }

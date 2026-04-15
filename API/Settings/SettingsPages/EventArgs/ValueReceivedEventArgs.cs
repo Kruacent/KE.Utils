@@ -5,19 +5,17 @@ using System.Text;
 using System.Threading.Tasks;
 using UserSettings.ServerSpecific;
 
-namespace KE.Utils.API.Settings.EventArgs
+namespace KE.Utils.API.Settings.SettingsPages.EventArgs
 {
-    public class KeybindPressedEventArgs
+    public class ValueReceivedEventArgs
     {
-        public KeybindPressedEventArgs(SSKeybindSetting settings, bool isPressed, ReferenceHub referenceHub)
+        public ValueReceivedEventArgs(ServerSpecificSettingBase settings, ReferenceHub referenceHub)
         {
             Settings = settings;
-            IsPressed = isPressed;
             ReferenceHub = referenceHub;
         }
 
-        public SSKeybindSetting Settings { get; }
-        public bool IsPressed { get; }
+        public ServerSpecificSettingBase Settings { get; }
         public ReferenceHub ReferenceHub { get; }
 
 

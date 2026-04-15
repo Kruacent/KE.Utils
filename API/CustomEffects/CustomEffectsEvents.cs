@@ -1,14 +1,15 @@
-﻿using KE.Utils.API.Interfaces;
+﻿using KE.Utils.API.CustomStats;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace KE.Utils.API.CustomStats
+namespace KE.Utils.API.CustomEffects
 {
-    public static class CustomStatsEvents
+    internal class CustomEffectsEvents
     {
+
         private static bool _event = false;
         public static void SubscribeEvents()
         {
@@ -17,7 +18,7 @@ namespace KE.Utils.API.CustomStats
                 LabApi.Events.Handlers.PlayerEvents.Joined += OnJoined;
                 _event = true;
             }
-            
+
         }
 
 
@@ -32,7 +33,7 @@ namespace KE.Utils.API.CustomStats
 
         private static void OnJoined(LabApi.Events.Arguments.PlayerEvents.PlayerJoinedEventArgs ev)
         {
-            //ev.Player.ReferenceHub.gameObject.AddComponent<CustomPlayerStat>();
+            ev.Player.ReferenceHub.gameObject.AddComponent<CustomEffectController>();
         }
     }
 }

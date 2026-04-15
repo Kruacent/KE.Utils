@@ -1,8 +1,10 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
+using KE.CustomRoles.API.Features;
 using KE.Utils.API.CustomStats;
 using Mirror;
+using PlayerRoles;
 using PlayerStatsSystem;
 using System;
 using System.Collections.Generic;
@@ -38,26 +40,53 @@ namespace KE.Utils.Extensions
 
 
 
-        public static void AddLevelEffect(this Player p,EffectType type, int intensity)
+        public static void AddLevelEffect<T>(this Player player, int addintensity) where T : StatusEffectBase
         {
-            
 
+            T effect = player.GetEffect<T>();
 
-            if (p.TryGetEffect(type, out var effect))
-            {
-                byte newIntensity =(byte) Mathf.Clamp(effect.Intensity + intensity,byte.MinValue,byte.MaxValue);
-
-                p.ChangeEffectIntensity(type, newIntensity);
-            }
-            else
-            {
-                byte newIntensity = (byte)Mathf.Clamp(intensity, byte.MinValue, byte.MaxValue);
-                p.EnableEffect(type, newIntensity);
-            }
-
-
+            AddLevelEffect(player, effect, addintensity);
         }
 
+        
+
+        public static void AddLevelEffect(this Player player, EffectType effect, int addintensity)
+        {
+            StatusEffectBase effectBase = player.GetEffect(effect);
+
+            AddLevelEffect(player, effect, addintensity);
+        }
+
+        private static void AddLevelEffect(Player player, StatusEffectBase effect, int addintensity)
+        {
+            byte newIntensity = (byte)Mathf.Clamp(effect.Intensity + addintensity, byte.MinValue, byte.MaxValue);
+
+            effect.Intensity = newIntensity;
+        }
+
+        public static void ChangeRole(this Player player,RoleTypeId newRole,SpawnReason spawnReason,RoleSpawnFlags spawnFlags)
+        {
+            KECustomRole oldcr = null;
+            bool flag = false;
+            if(KECustomRole.TryGet(player, out var roles))
+            {
+                oldcr = (KECustomRole) roles.FirstOrDefault();
+                Log.Info("found " + oldcr.Name);
+                flag = oldcr.RoleCheck(newRole);
+                Log.Info("flag " + flag);
+
+            }
+
+
+            player.Role.Set(newRole, spawnReason, spawnFlags);
+
+
+            if (flag)
+            {
+                oldcr.AddRole(player);
+            }
+            
+        }
 
 
     }
