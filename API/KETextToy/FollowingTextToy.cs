@@ -36,7 +36,6 @@ namespace KE.Utils.API.KETextToy
         }
 
 
-        private int i = 0;
         public void SyncToPlayers()
         {
             foreach(Player player in Player.Enumerable)
@@ -113,6 +112,10 @@ namespace KE.Utils.API.KETextToy
         {
             list.Remove(this);
             Toy.Destroy();
+            if(list.Count == 0)
+            {
+                Stop();
+            }
         }
 
 
