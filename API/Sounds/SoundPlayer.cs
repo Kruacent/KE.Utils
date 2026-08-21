@@ -35,7 +35,7 @@ namespace KE.Utils.API.Sounds
 
         public static readonly HashSet<string> clips = new();
 
-        public static string SoundLocation => Paths.Configs + "/Sounds";
+        public static string SoundLocation => Path.Combine(Paths.Configs,"Sounds");
         public static void Load() => Instance.TryLoad();
         public void TryLoad()
         {
@@ -44,13 +44,32 @@ namespace KE.Utils.API.Sounds
                 return;
             }
 
-            if (!Directory.Exists(SoundLocation))
+            try
             {
-                Log.Warn("Directory not found. creating...");
-                Directory.CreateDirectory(SoundLocation);
+                if (Directory.Exists(SoundLocation))
+                {
+                    LoadRecursive(SoundLocation);
+                }
+                else
+                {
+                    Log.Warn("Directory not found. creating...");
+                    Directory.CreateDirectory(SoundLocation);
+                }
             }
+            catch (IOException e)
+            {
+                Log.Error(e);
+            }
+            
+            _loaded = true;
+        }
 
-            string[] rawfile = Directory.GetFiles(SoundLocation, "*.ogg");
+
+        private void LoadRecursive(string directory)
+        {
+            string[] rawfile = Directory.GetFiles(directory, "*.ogg");
+            string[] directories = Directory.GetDirectories(directory);
+
 
             foreach (string file in rawfile)
             {
@@ -59,7 +78,11 @@ namespace KE.Utils.API.Sounds
                 clips.Add(noExFile);
                 AudioClipStorage.LoadClip(file);
             }
-            _loaded = true;
+
+            foreach(string direc in directories)
+            {
+                LoadRecursive(direc);
+            }
         }
 
 
