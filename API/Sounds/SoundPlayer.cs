@@ -1,5 +1,6 @@
 ﻿using Exiled.API.Features;
 using KE.Utils.API.Exceptions;
+using MEC;
 using PlayerRoles;
 using System;
 using System.Collections.Generic;
@@ -44,6 +45,13 @@ namespace KE.Utils.API.Sounds
                 return;
             }
 
+            Timing.RunCoroutine(AsyncLoad());
+            
+        }
+
+
+        private IEnumerator<float> AsyncLoad()
+        {
             try
             {
                 if (Directory.Exists(SoundLocation))
@@ -60,8 +68,9 @@ namespace KE.Utils.API.Sounds
             {
                 Log.Error(e);
             }
-            
+
             _loaded = true;
+            yield return 0;
         }
 
 
