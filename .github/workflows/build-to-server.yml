@@ -1,0 +1,71 @@
+name: Build and put on the server
+
+on:
+  push:
+    branches: [ "master", "dev" ]
+  pull_request:
+    branches: [ "master", "dev" ]
+  workflow_dispatch:
+
+permissions:
+  contents: write
+env:
+  OUTPUT_FOLDER_PATH: $HOME/.config/EXILED/Plugins/
+  EXILED_REFERENCES: ${{ github.workspace }}/references
+  SERVER_LOCATION: $HOME/steamcmd/scpsl/
+  OTHER_REFERENCES: $HOME/otherReferences/
+jobs:
+  build:
+    runs-on: self-hosted 
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Restore NuGet packages
+        run: |
+          SLN=$(find . -name "*.sln" | head -n 1)
+          dotnet restore "$SLN"
+
+
+      - name : Fill Exiled References
+        run: |
+          wget https://github.com/ExMod-Team/EXILED/releases/latest/download/Exiled.tar.gz
+          mkdir ${{ env.EXILED_REFERENCES }}
+          tar -xf Exiled.tar.gz -C ${{ env.EXILED_REFERENCES }}
+          find ${{env.SERVER_LOCATION}}/SCPSL_Data/Managed/ -name "*.dll" | xargs cp -t ${{env.EXILED_REFERENCES}}
+          rm Exiled.tar.gz
+        
+      - name: Fill Other References
+        run: |
+          cp -r ${{ env.OTHER_REFERENCES }}. ${{env.EXILED_REFERENCES}}
+
+      - name: Build solution
+        run: |
+          export EXILED_REFERENCES=${{ env.EXILED_REFERENCES }}
+          SLN=$(find . -name "*.sln" | head -n 1)
+          dotnet build "$SLN" --configuration Release --no-restore
+
+      - name: Copy plugin to server
+        if: github.event_name == 'push' && github.ref_name == 'master'
+        id: copy_step
+        run: |
+          DLL=$(find . -path "*/bin/Release/*KE.Utils.dll" | head -n 1)
+      
+          if [ -z "$DLL" ]; then
+            echo "DLL not found!"
+            exit 1
+          fi
+          cp "$DLL" ${{ env.OUTPUT_FOLDER_PATH }}
+
+          echo "dll_path=$DLL" >> $GITHUB_OUTPUT
+
+      - name: Create GitHub Release Draft
+        if: github.event_name == 'push' && github.ref_name == 'master'
+        uses: softprops/action-gh-release@3bb12739c298aeb8a4eeaf626c5b8d85266b0e65 # release v2.6.2
+        with:
+          tag_name: draft-${{ github.sha }}
+          name: "Draft Release"
+          draft: true
+          files: ${{ steps.copy_step.outputs.dll_path }}
+          generate_release_notes: false
