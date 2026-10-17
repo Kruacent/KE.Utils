@@ -1,11 +1,8 @@
 ﻿using CustomPlayerEffects;
 using Exiled.API.Enums;
 using Exiled.API.Features;
-using KruacentExiled.CustomRoles.API.Features;
-using PlayerRoles;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace KE.Utils.Extensions
