@@ -50,13 +50,28 @@ namespace KE.Utils.API.Sounds
         }
 
 
+        public void UnloadAllClips()
+        {
+            foreach(string clip in clips)
+            {
+                AudioClipStorage.DestroyClip(clip);
+            }
+        }
+
+
         private IEnumerator<float> AsyncLoad()
         {
             try
             {
                 if (Directory.Exists(SoundLocation))
                 {
-                    LoadRecursive(SoundLocation);
+
+                    int countLoaded = 0;
+                    int count = 0;
+
+                    LoadRecursive(SoundLocation, ref countLoaded, ref count);
+
+                    Log.Info($"loaded {countLoaded}/{count} clips");
                 }
                 else
                 {
@@ -74,24 +89,36 @@ namespace KE.Utils.API.Sounds
         }
 
 
-        private void LoadRecursive(string directory)
+        private void LoadRecursive(string directory,ref int countLoaded,ref int count)
         {
             string[] rawfile = Directory.GetFiles(directory, "*.ogg");
             string[] directories = Directory.GetDirectories(directory);
 
-
+            count += rawfile.Length;
             foreach (string file in rawfile)
             {
                 string noExFile = Path.GetFileNameWithoutExtension(file);
-                Log.Info($"loading {file} as {noExFile}");
-                clips.Add(noExFile);
-                AudioClipStorage.LoadClip(file);
+                if (!clips.Add(noExFile))
+                {
+                    Log.Error("couldn't load clip " + noExFile +" : already exist");
+                    continue;
+                }
+
+                if (!AudioClipStorage.LoadClip(file))
+                {
+                    Log.Error("couldn't load clip " + noExFile);
+                }
+
+                countLoaded++;
+                
             }
 
             foreach(string direc in directories)
             {
-                LoadRecursive(direc);
+                LoadRecursive(direc,ref countLoaded,ref count);
             }
+
+            
         }
 
 
