@@ -68,7 +68,6 @@ namespace KE.Utils.API.GifAnimator
 
             sb.Append("</size>");
             rawString = sb.ToString();
-            Log.Info("image length = " + rawString.Length);
 
             StringBuilderPool.Pool.Return(sb);
         }
