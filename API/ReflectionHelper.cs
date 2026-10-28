@@ -1,9 +1,7 @@
-﻿using System;
+﻿using Exiled.API.Features;
+using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace KE.Utils.API
 {
@@ -26,9 +24,9 @@ namespace KE.Utils.API
                         result.Add(ffcc);
                     }
                 }
-                catch (Exception)
+                catch (Exception e)
                 {
-
+                    Log.Error(e);
                 }
             }
             return result;
