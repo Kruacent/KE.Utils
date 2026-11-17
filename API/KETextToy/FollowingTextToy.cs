@@ -1,13 +1,10 @@
 ﻿using Exiled.API.Extensions;
 using Exiled.API.Features;
-using Exiled.Events.Handlers;
 using LabApi.Features.Wrappers;
 using MEC;
-using System;
+using Mirror;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using UnityEngine;
 using Player = Exiled.API.Features.Player;
 
@@ -17,20 +14,44 @@ namespace KE.Utils.API.KETextToy
     {
 
         private static HashSet<FollowingTextToy> list = new();
-        public HashSet<Player> Following { get; }
+        public IReadOnlyCollection<Player> Following { get; }
         public TextToy Toy { get; }
 
-        public string Text { get; set; }
         public const string EmptyText = " ";
 
         public bool OnlyMoveY { get; set; } = false;
 
+        public string Text
+        {
+            get
+            {
+                return Toy.TextFormat;
+            }
+            set
+            {
+                Toy.TextFormat = value;
+            }
+        }
 
         public FollowingTextToy(IEnumerable<Player> players, Vector3 position, Quaternion rotation, Vector3 scale)
         {
-            Following = players.ToHashSet();
+            Following = players.ToList();
             Toy = TextToy.Create(position, rotation, scale, null, false);
             Toy.MovementSmoothing = 0;
+
+            Toy.Spawn();
+
+            foreach (Player player in Player.Enumerable)
+            {
+                if (!players.Contains(player))
+                {
+                    Log.Warn("hiding texttoy to " + player.Nickname);
+                    player.Connection.Send(new ObjectHideMessage() { netId = Toy.Base.netId });
+                }
+            }
+                
+
+
             list.Add(this);
             Start();
         }
@@ -38,32 +59,21 @@ namespace KE.Utils.API.KETextToy
 
         public void SyncToPlayers()
         {
-            foreach(Player player in Player.Enumerable)
+            foreach(Player player in Following)
             {
-                if (Following.Contains(player))
+                Vector3 dir = player.CameraTransform.position - Toy.Position;
+                if (OnlyMoveY)
                 {
-                    Vector3 dir = player.CameraTransform.position - Toy.Position;
-                    if (OnlyMoveY)
-                    {
-                        dir.y = 0f;
-                        dir.Normalize();
-                    }
-
-                    if (!dir.Equals(Vector3.zero))
-                    {
-                        Quaternion rot = Quaternion.LookRotation(dir) * Quaternion.Euler(0f, 180f, 0f);
-                        player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkRotation), rot);
-                    }
-
-
-                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.Network_textFormat), Text);
-                }
-                else
-                {
-                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.Network_textFormat), EmptyText);
+                    dir.y = 0f;
+                    dir.Normalize();
                 }
 
-                
+                if (!dir.Equals(Vector3.zero))
+                {
+                    Quaternion rot = Quaternion.LookRotation(dir) * Quaternion.Euler(0f, 180f, 0f);
+                    player.SendFakeSyncVar(Toy.Base.netIdentity, typeof(AdminToys.TextToy), nameof(AdminToys.TextToy.NetworkRotation), rot);
+                }
+
             }
         }
 
